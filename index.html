@@ -1,0 +1,331 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Improving Deep Reinforcement Learning by Reducing the Chain Effect of Value and Policy Churn">
+  <meta name="keywords" content="Churn, Deep RL, Instability, Function Approximation">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Improving Deep Reinforcement Learning by Reducing the Chain Effect of Value and Policy Churn</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-B37BFDTB3H"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-B37BFDTB3H');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro|Source+Code+Pro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <!-- <link rel="stylesheet" href="./static/css/fontawesome.all.min.css"> -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <!-- <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script> -->
+  <!-- <script src="./static/js/index.js"></script> -->
+</head>
+<body>
+
+<!-- <nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item" href="/">
+      <span class="icon">
+          <i class="fas fa-home"></i>
+      </span>
+      </a>
+
+      <!-- <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More Research
+        </a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="https://aditya.bhatts.org/sensorless-in-hand-manipulation">
+            Surprisingly Robust In-Hand Manipulation
+          </a>
+          <a class="navbar-item" href="https://nerfies.github.io">
+            CrossQ:
+          </a>
+          <a class="navbar-item" href="https://latentfusion.github.io">
+            LatentFusion
+          </a>
+          <a class="navbar-item" href="https://photoshape.github.io">
+            PhotoShape
+          </a>
+        </div>
+      </div>
+    </div> 
+
+  </div>
+</nav> -->
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <div class="is-size-5 publication-authors">
+            <span class="author-block spotlight">NeurIPS 2024</span>
+            <!-- <span class="author-block spotlight">NeurIPS 2024 • <span style="font-weight: bold; color: orange !important;">top 5%</span> • spotlight </span> -->
+          </div>
+          <h1 class="title is-size-3 publication-title"><span style="font-weight: bold; color: rgb(250, 250, 250) !important;">Improving Deep Reinforcement Learning<br/> by Reducing the Chain Effect of Value and Policy Churn</span></h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://bluecontra.github.io"><span style="font-weight: bold; color: rgb(120, 218, 224) !important;">Hongyao Tang</span></a><sup>1,2</sup></span>
+            <span class="author-block">
+              <a href="https://neo-x.github.io/"><span style="font-weight: bold; color: rgb(120, 218, 224) !important;">Glen Berseth</span></a><sup>1,2</sup></span>
+          </div>
+
+          <div class="is-size-5 publication-authors publication-affiliation">
+            <!-- <span class="author-block"><sup>*</sup>Equal contribution</span> -->
+            <span class="author-block"><sup>1</sup><span style="color: rgb(250, 250, 250) !important;">Mila - Quebec AI Institute</span></span>
+            <span class="author-block"><sup>2</sup><span style="color: rgb(250, 250, 250) !important;">Université de Montréal</span></span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://openreview.net/pdf?id=cQoAgPBARc"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <!-- <span class="link-block">
+                <a href="https://arxiv.org/abs/2011.12948"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span> -->
+              <!-- Video Link. -->
+              <!-- <span class="link-block">
+                <a href="talk_recording_goes_here"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span> -->
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/bluecontra/CHAIN"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+            <p>
+            <em>Instability is a longstanding problem in deep reinforcement learning.</em> In this work, we propose <crossq>CHAIN</crossq>...
+            </p>
+            <!-- <p>To reduce this computational burden, we introduce
+            : a lightweight algorithm for continuous control tasks that makes careful
+            use of <em>Batch Normalization</em> and <em>removes target networks</em> to surpass the
+            current state-of-the-art in sample efficiency, while maintaining a <em>low UTD ratio
+            of 1</em>. Notably, <crossq>CrossQ</crossq> does not rely on advanced bias-reduction schemes used in
+            current methods.
+            </p> -->
+            The constributions of <crossq>CHAIN</crossq> are threefold:
+            <ol>
+              <!-- <li>it matches or surpasses current state-of-the-art methods in terms of <em>sample efficiency</em>,</li> -->
+              <!-- <li>it <em>substantially reduces the computational cost</em> compared to REDQ and DroQ,</li> -->
+              <li>it is easy to implement, requiring <em>just a few lines of code</em> on top of base algorithms, e.g., DoubleDQN, PPO, TD3, SAC.</li>
+              <li>xxx </li>
+            </ol>
+            </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+  </div>
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <img src="./static/images/efficiency_sample_compute.png"/>
+        <!-- <img src="./static/images/efficiency_wallclock.png"/> -->
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">TL;DR</h2>
+        <div class="content has-text-justified">
+            <h3 class="title is-4">Problem</h3>
+            We ....
+            <!-- <ul>
+              <li>
+                UTD=1 methods — like SAC and TD3 — are fast, but <em>not sample-efficient enough</em>
+              </li>
+              <li>
+                UTD=20 methods — like REDQ and DroQ — are sample-efficient, but <em>not fast enough</em>
+              </li>
+              <li>
+                High-UTD training <em>requires Q-function bias reduction</em>, making algorithms more complex
+              </li>
+            </ul> -->
+            Can we figure out how churn occurs and influence the learning process of popular DRL agents? And can we improve learning performance by regularizing churn?
+            
+            <h3 class="title is-4">Insight</h3>
+            xxxx
+            <ul>
+              <li>
+                Churn exists in the training of <em>both the value network and the policy network</em>. These churns accompany each single mini-batch training of neural network.
+              </li>
+              <!-- <li>
+                Both batches in TD have <em>different statistics</em>: <em>A</em> comes from the replay, <em>A'</em> comes from the policy
+              </li>
+              <li>
+                BatchNorm's <em>mismatched running statistics</em> degrade Q predictions and harm training
+              </li> -->
+            </ul>
+            <h3 class="title is-4">Solution</h3>
+            <ol>
+              <li>
+                Sample a separate batch alongside the conventional training batch, called <em>reference batch</em>
+              </li>
+              <!-- <li>
+                Concatenate the batches <em>(S, A)</em> and <em>(S', A')</em> into one, and do a <em>single forward pass</em>
+              </li> -->
+            </ol>
+            <p>
+            We call this regularization method <em>CH</em>urn <em>A</em>pproximated Reduct<em>I</em>o<em>N</em>, i.e., <crossq>CHAIN</crossq>. 
+            </p>
+            <img class='paper-img' src="./static/images/before_after.png"/>
+            
+            <!-- <h3 class="title is-4"><crossq>CrossQ</crossq></h3>
+            To turn SAC into <crossq>CrossQ</crossq>, we make <em>3 key changes</em>:
+            <ol>
+              <li><em>Delete target nets</em>, simplifying the algorithm</li>
+              <li><em>Use batch normalization</em>, boosting sample-efficiency by an order of magnitude</li>
+              <li><em>Widen the critic</em>, further improving performance</li>
+            </ol>
+            <p>
+            These changes take only a few lines of code.
+            </p>
+            <img class='paper-img' src="./static/images/efficiency_sample.png"/> -->
+            
+            
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+  </div>
+</section>
+
+
+
+<section class="section" id="Cite">
+  <div class="container is-max-desktop content">
+    <!--
+      <h2>Try</h2>
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <img class="paper-img" src="./static/images/jax_code.png"/>
+      </div>
+    </div>
+      <h2>Read</h2>
+      <a href="https://openreview.net/pdf?id=PczQtTsTIX">
+      <ol class="paper-strip">
+        <li><img src="./static/images/paperimg/paperimg-01.png" /> </li>
+        <li><img src="./static/images/paperimg/paperimg-02.png" /> </li>
+        <li><img src="./static/images/paperimg/paperimg-03.png" /> </li>
+        <li><img src="./static/images/paperimg/paperimg-04.png" /> </li>
+        <li><img src="./static/images/paperimg/paperimg-05.png" /> </li>
+        <li><img src="./static/images/paperimg/paperimg-06.png" /> </li>
+        <li><img src="./static/images/paperimg/paperimg-07.png" /> </li>
+        <li><img src="./static/images/paperimg/paperimg-08.png" /> </li>
+        <li><img src="./static/images/paperimg/paperimg-09.png" /> </li>
+      </ol>
+    </a>
+    -->
+    <h2>BibTeX</h2>
+    <pre><code>
+@inproceedings{
+  <b>htang2024improving</b>,
+  title={Improving Deep Reinforcement Learning by Reducing the Chain Effect of Value and Policy Churn},
+  author={Hongyao Tang and Glen Berseth},
+  booktitle={Advances in Neural Information Processing Systems},
+  year={2024},
+  url={https://openreview.net/pdf?id=cQoAgPBARc}
+}
+    </code></pre>
+  </div>
+</section>
+
+
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p style="text-align: center;">
+            design adapted from <a
+              href="https://aditya.bhatts.org/CrossQ/">nerfies.github.io</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
