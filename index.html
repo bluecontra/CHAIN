@@ -90,15 +90,15 @@
       <div class="columns is-centered">
         <div class="column has-text-centered">
           <div class="is-size-5 publication-authors">
-            <span class="author-block spotlight">NeurIPS 2024</span>
+            <span class="author-block spotlight"><span style="font-weight: bold; color: orange !important;">NeurIPS 2024</span></span>
             <!-- <span class="author-block spotlight">NeurIPS 2024 • <span style="font-weight: bold; color: orange !important;">top 5%</span> • spotlight </span> -->
           </div>
           <h1 class="title is-size-3 publication-title"><span style="font-weight: bold; color: rgb(250, 250, 250) !important;">Improving Deep Reinforcement Learning<br/> by Reducing the Chain Effect of Value and Policy Churn</span></h1>
           <div class="is-size-5 publication-authors">
             <span class="author-block">
-              <a href="https://bluecontra.github.io"><span style="font-weight: bold; color: rgb(120, 218, 224) !important;">Hongyao Tang</span></a><sup>1,2</sup></span>
+              <a href="https://bluecontra.github.io"><span style="font-weight: bold; color: rgb(93, 240, 248) !important;">Hongyao Tang</span></a><sup>1,2</sup></span>
             <span class="author-block">
-              <a href="https://neo-x.github.io/"><span style="font-weight: bold; color: rgb(120, 218, 224) !important;">Glen Berseth</span></a><sup>1,2</sup></span>
+              <a href="https://neo-x.github.io/"><span style="font-weight: bold; color: rgb(93, 240, 248) !important;">Glen Berseth</span></a><sup>1,2</sup></span>
           </div>
 
           <div class="is-size-5 publication-authors publication-affiliation">
@@ -166,21 +166,19 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
             <p>
-            <em>Instability is a longstanding problem in deep reinforcement learning.</em> In this work, we propose <crossq>CHAIN</crossq>...
+            Deep neural networks introduce challenges due to the non-stationary nature of RL training.
+            One source of the challenges in RL is that output predictions can <i>churn</i>, leading to <em>uncontrolled changes</em> after each batch update for <em>states not included in the batch</em>.
+            Although such a churn phenomenon exists in each step of network training, how churn occurs and impacts RL remains under-explored.
             </p>
-            <!-- <p>To reduce this computational burden, we introduce
-            : a lightweight algorithm for continuous control tasks that makes careful
-            use of <em>Batch Normalization</em> and <em>removes target networks</em> to surpass the
-            current state-of-the-art in sample efficiency, while maintaining a <em>low UTD ratio
-            of 1</em>. Notably, <crossq>CrossQ</crossq> does not rely on advanced bias-reduction schemes used in
-            current methods.
-            </p> -->
-            The constributions of <crossq>CHAIN</crossq> are threefold:
+            <p>
+            In this work, we aim to answer <em>how churn occurs and influence the learning process of DRL agents</em>, and <em>how to deal with churn for better learning performance</em>.
+            The contributions are summarized below:
+            </p>
             <ol>
-              <!-- <li>it matches or surpasses current state-of-the-art methods in terms of <em>sample efficiency</em>,</li> -->
-              <!-- <li>it <em>substantially reduces the computational cost</em> compared to REDQ and DroQ,</li> -->
-              <li>it is easy to implement, requiring <em>just a few lines of code</em> on top of base algorithms, e.g., DoubleDQN, PPO, TD3, SAC.</li>
-              <li>xxx </li>
+              <li>We formally define and study the policy and value churn under GPI framework and present <em>the chain effect of churn</em>, which induces compounding churns and biases throughout learning.</li>
+              <li>We show how churn results in three learning issues in typical DRL settings, including Greedy-action Deviation, Trust Region Violation, and Dual Bias in Policy Value.</li>
+              <li>We propose a general method to reduce the chain effect, called <em>CH</em>urn <em>A</em>pproximated Reduct<em>I</em>o<em>N</em> (<chain>CHAIN</chain>), which can be easily plugged into most existing DRL algorithms.
+              In our experiments, we show that <chain>CHAIN</chain> effectively <em>alleviates the learning issues</em>, <em>improves efficiency and final scores</em> in various settings, and <em>facilitates the scaling of PPO</em>.</li>
             </ol>
             </p>
         </div>
@@ -188,14 +186,13 @@
     </div>
     <!--/ Abstract. -->
   </div>
-  <div class="container is-max-desktop">
+  <!-- <div class="container is-max-desktop">
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
         <img src="./static/images/efficiency_sample_compute.png"/>
-        <!-- <img src="./static/images/efficiency_wallclock.png"/> -->
       </div>
     </div>
-  </div>
+  </div> -->
 
 </section>
 
@@ -207,8 +204,28 @@
       <div class="column is-four-fifths">
         <h2 class="title is-3">TL;DR</h2>
         <div class="content has-text-justified">
-            <h3 class="title is-4">Problem</h3>
-            We ....
+            <h3 class="title is-4">What is Churn?</h3>
+            <p>
+            In general, churn is defined as <em>the difference between the prior-update network prediction and the post-update network prediction</em>
+            for the data <em>NOT</em> in the batch used to make the update:
+            </p>
+            <div class="container is-max-desktop">
+              <div class="columns is-centered has-text-centered">
+                <div class="column is-four-fifths">
+                  <img class='paper-img' src="./static/images/churn_def.png" width="80%"/>
+                </div>
+              </div>
+            </div>
+            <p>
+            In the context of deep RL, we care about the <em>value churn</em> and the <em>policy churn</em>:
+            </p>
+            <div class="container is-max-desktop">
+              <div class="columns is-centered has-text-centered">
+                <div class="column is-four-fifths">
+                  <img class='paper-img' src="./static/images/value_and_policy_churn_def.png" width="80%"/>
+                </div>
+              </div>
+            </div>
             <!-- <ul>
               <li>
                 UTD=1 methods — like SAC and TD3 — are fast, but <em>not sample-efficient enough</em>
@@ -220,34 +237,86 @@
                 High-UTD training <em>requires Q-function bias reduction</em>, making algorithms more complex
               </li>
             </ul> -->
-            Can we figure out how churn occurs and influence the learning process of popular DRL agents? And can we improve learning performance by regularizing churn?
             
-            <h3 class="title is-4">Insight</h3>
-            xxxx
-            <ul>
-              <li>
-                Churn exists in the training of <em>both the value network and the policy network</em>. These churns accompany each single mini-batch training of neural network.
-              </li>
+            <h3 class="title is-4">Where is Churn in Deep RL?</h3>
+            <p>Let's explicitly model the churn in a general form with the <em>Generalized Policy Iteration (GPI)</em> framework. 
+            Compared to the standard GPI where churn is neglected, now we have the churn in the iterative training process of both the value function and policy function.
+            </p>
+            <p>As illustrated, we consider <em>both the exact updates</em> for the data in training batches and <em>the implicit changes caused by churn</em> for out-of-batch data.</p>
+            <div class="container is-max-desktop">
+              <div class="columns is-centered has-text-centered">
+                <div class="column is-four-fifths">
+                  <img class='paper-img' src="./static/images/gpi_comparison.png"/>
+                  <span style="color: grey !important;">Standard GPI [Sutton and Barto, 2018] (<i>left</i>) v.s. GPI under churn (<i>right</i>)</span>
+                </div>
+              </div>
+            </div>
+
+            <h3 class="title is-4">How the policy and value churn occur and influence the learning?</h3>
+            <span style="font-weight: bold; color: black !important;">The Chain Effect of Churn</span>
+            <ol>
+              <li>The <em>network parameter updates causes</em> the value and policy <em>churn</em>.</li>
+              <li>The policy churn and value <em>churn further lead to the deviations</em> in the action gradient and policy value.</li>
+              <li>Then, the churns and the deviations <em>bias the following parameter updates</em>.</li>
               <!-- <li>
                 Both batches in TD have <em>different statistics</em>: <em>A</em> comes from the replay, <em>A'</em> comes from the policy
               </li>
               <li>
                 BatchNorm's <em>mismatched running statistics</em> degrade Q predictions and harm training
               </li> -->
-            </ul>
-            <h3 class="title is-4">Solution</h3>
-            <ol>
-              <li>
-                Sample a separate batch alongside the conventional training batch, called <em>reference batch</em>
-              </li>
-              <!-- <li>
-                Concatenate the batches <em>(S, A)</em> and <em>(S', A')</em> into one, and do a <em>single forward pass</em>
-              </li> -->
             </ol>
-            <p>
-            We call this regularization method <em>CH</em>urn <em>A</em>pproximated Reduct<em>I</em>o<em>N</em>, i.e., <crossq>CHAIN</crossq>. 
-            </p>
-            <img class='paper-img' src="./static/images/before_after.png"/>
+            <p>The chain effect forms a cycle and lasts throughout learning, where the churn and biases can <em>accumulate and amplify each other</em>.</p>
+            
+            <span style="font-weight: bold; color: black !important;">The Issues Caused by Churn in Popular Deep RL Agents</span>
+            <ul>
+              <li><em>Greedy action deviation</em> in value-based methods</li>
+              <div class="container is-max-desktop">
+                <div class="columns is-centered has-text-centered">
+                  <div class="column is-four-fifths">
+                    <img class='paper-img' src="./static/images/greedy_action_deviation.png" width="60%"/>
+                  </div>
+                </div>
+              </div>
+              <li><em>Trust region violation</em> in policy gradient methods</li>
+              <div class="container is-max-desktop">
+                <div class="columns is-centered has-text-centered">
+                  <div class="column is-four-fifths">
+                    <img class='paper-img' src="./static/images/trust_region_violation.png" width="80%"/>
+                  </div>
+                </div>
+              </div>
+              <li><em>Dual bias of policy value</em> in AC methods</li>
+              <div class="container is-max-desktop">
+                <div class="columns is-centered has-text-centered">
+                  <div class="column is-four-fifths">
+                    <img class='paper-img' src="./static/images/dual_bias_of_policy_value.png" width="45%"/>
+                  </div>
+                </div>
+              </div>
+            </ul>
+
+            <h3 class="title is-4">Regularizing Churn for Better Deep RL</h3>
+            We propose a simple regularization method, called <em>Churn Approximated Reduction</em> (<chain>CHAIN</chain>), to reduce churn by holding a conservative attitude on the churn. 
+            <ol>
+              <li>Sample a separate batch alongside the conventional training batch, called <em>reference batch</em>.</li>
+              <li>Compute the churn amount with the reference batch as <em>the churn regularization term</em>.</li>
+              <div class="container is-max-desktop">
+                <div class="columns is-centered has-text-centered">
+                  <div class="column is-four-fifths">
+                    <img class='paper-img' src="./static/images/regularization_term.png" width="80%"/>
+                  </div>
+                </div>
+              </div>
+              <li>(Optional) Adjust the regularization coefficient according to the relative scale between the regularization term and the conventional deep RL objectives.</li>
+              <li>Minimize the churn regularization terms <em>together with</em> the conventional RL objectives.</li>
+              <div class="container is-max-desktop">
+                <div class="columns is-centered has-text-centered">
+                  <div class="column is-four-fifths">
+                    <img class='paper-img' src="./static/images/chain_loss_func.png" width="65%"/>
+                  </div>
+                </div>
+              </div>
+            </ol>
             
             <!-- <h3 class="title is-4"><crossq>CrossQ</crossq></h3>
             To turn SAC into <crossq>CrossQ</crossq>, we make <em>3 key changes</em>:
@@ -269,7 +338,94 @@
   </div>
 </section>
 
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Experiments</h2>
+        <div class="content has-text-justified">
+            
+            <h3 class="title is-4"><chain>CHAIN</chain> Reduces the Deviation of Greedy Action</h3>
+            <p>For DoubleDQN and MinAtar environments, churn induces a decrease in the value of greedy action, thus degrading to inferior actions.
+              While <chain>CHAIN</chain> significantly prevents it and leads to higher efficiency and better final scores.</p>
+              <div class="container is-max-desktop">
+                <div class="columns is-centered has-text-centered">
+                  <div class="column is-four-fifths">
+                    <img class='paper-img' src="./static/images/chain_ddqn_fig.png"/>
+                    <span style="color: grey !important;">DoubleDQN (DDQN) v.s., <chain>CHAIN</chain>-DDQN in MinAtar tasks.</span>
+                  </div>
+                </div>
+              </div>
+              <div class="container is-max-desktop">
+                <div class="columns is-centered has-text-centered">
+                  <div class="column is-four-fifths">
+                    <img class='paper-img' src="./static/images/chain_ddqn_value_churn.png"/>
+                    <span style="color: grey !important;">DDQN v.s., <chain>CHAIN</chain>-DDQN in terms of:
+                      (from left to right) greedy action deviation (%), value change of all actions, value change of greedy action.
+                     </span>
+                  </div>
+                </div>
+              </div>
 
+            <h3 class="title is-4"><chain>CHAIN</chain> Reduces Policy Churn and Clip Range Violation</h3>
+            <p>For PPO and continuous control tasks in MuJoCo and DMC, <chain>CHAIN</chain> reduces the policy churn effectively and suppresses the violation of clip range, leading to improved learning performance in terms of efficiency and higher scores.</p>
+            <div class="container is-max-desktop">
+              <div class="columns is-centered has-text-centered">
+                <div class="column is-four-fifths">
+                  <img class='paper-img' src="./static/images/chain_ppo_fig.png"/>
+                  <span style="color: grey !important;">PPO v.s., <chain>CHAIN</chain>-PPO in MuJoCo and DMC tasks.</span>
+                </div>
+              </div>
+            </div>
+            <div class="container is-max-desktop">
+              <div class="columns is-centered has-text-centered">
+                <div class="column is-four-fifths">
+                  <img class='paper-img' src="./static/images/chain_policy_reduce_fig.png"/>
+                  <span style="color: grey !important;"><chain>CHAIN</chain>-PPO with different static regularization coefficients.
+                    From left to right: episode return, policy churn, policy loss, and the regularization term.
+                  (The policy churn diminishes as the decay of learning rate.)</span>
+                </div>
+              </div>
+            </div>
+
+            <h3 class="title is-4"><chain>CHAIN</chain> Facilitates the Scaling of PPO</h3>
+            <p><chain>CHAIN</chain> alleviates the deterioration of PPO when using larger networks, no matter scaling an MLP-based PPO agent by widening or deepening.
+              We think it is appealing as it reveals some promise to address the scalability issue by controlling churn or generalization.</p>
+              <div class="container is-max-desktop">
+                <div class="columns is-centered has-text-centered">
+                  <div class="column is-four-fifths">
+                    <img class='paper-img' src="./static/images/chain_scaling_fig.png"/>
+                    <span style="color: grey !important;">Scaling PPO with <chain>CHAIN</chain> across different scale and learning rate configurations.</span>
+                  </div>
+                </div>
+              </div>
+              <div class="container is-max-desktop">
+                <div class="columns is-centered has-text-centered">
+                  <div class="column is-four-fifths">
+                    <img class='paper-img' src="./static/images/chain_scaling_table.png"/>
+                  </div>
+                </div>
+              </div>
+            <!-- <h3 class="title is-4"><crossq>CrossQ</crossq></h3>
+            To turn SAC into <crossq>CrossQ</crossq>, we make <em>3 key changes</em>:
+            <ol>
+              <li><em>Delete target nets</em>, simplifying the algorithm</li>
+              <li><em>Use batch normalization</em>, boosting sample-efficiency by an order of magnitude</li>
+              <li><em>Widen the critic</em>, further improving performance</li>
+            </ol>
+            <p>
+            These changes take only a few lines of code.
+            </p>
+            <img class='paper-img' src="./static/images/efficiency_sample.png"/> -->
+            
+            
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+  </div>
+</section>
 
 <section class="section" id="Cite">
   <div class="container is-max-desktop content">
@@ -319,7 +475,7 @@
         <div class="content">
           <p style="text-align: center;">
             design adapted from <a
-              href="https://aditya.bhatts.org/CrossQ/">nerfies.github.io</a>
+              href="https://aditya.bhatts.org/CrossQ/">CrossQ</a>
           </p>
         </div>
       </div>
