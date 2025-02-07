@@ -1,5 +1,8 @@
-# CHAIN
-The code implementation of Churn Approximation Reduction (CHAIN) for NeurIPS 2024 paper "Improving Deep Reinforcement Learning by Reducing the Chain Effect of Value and Policy Churn"
+# CHAIN: Churn Approximated Reduction
+
+---
+
+The code implementation of Churn Approximated Reduction (CHAIN) for NeurIPS 2024 paper "Improving Deep Reinforcement Learning by Reducing the Chain Effect of Value and Policy Churn"
 
 
 Please refer to our [paper](https://openreview.net/pdf?id=cQoAgPBARc#page=21.54) and [project page](https://bluecontra.github.io/CHAIN/) for more details.
@@ -8,7 +11,8 @@ Please refer to our [paper](https://openreview.net/pdf?id=cQoAgPBARc#page=21.54)
 
 ### Running Environment Setups:
 
-Since our codes are wirtten upon existing code bases, one can run our code by following the installation of corresponding environments. 
+Since our codes are wirtten upon existing code bases (e.g., **MinAtar**, **MuJoCo/DMC Suite** from CleanRL, **D4RL** from CORL), one can run our code by following the installation of corresponding environments.
+Then download our code and put into the running script folder.
 
 We also provide the Dockerfile we used in ```./dockerfiles``` for reference. In practice, we mainly run with Apptainer (by building docker images first and converting them to Apptainer images).
 
@@ -36,9 +40,29 @@ We recommend to follow the installation guidance of MuJoCo env in CleanRL and th
 For our experiments on DMC Suite, we implement based on the original code provided in the official repo https://github.com/tinkoff-ai/CORL.
 We recommend to follow the installation guidance of D4RL env in CORL and then run our code provided in ```./corl```.
 
+---
+
+### Results
+
+#### CHAIN DoubleDQN v.s. DoubleDQN @ MinAtar
+
+![avatar](assets/chain_ddqn_fig.png)
+![avatar](assets/chain_ddqn_value_churn.png)
+
+#### CHAIN PPO v.s. PPO @ DMC & MuJoCo
+
+![avatar](assets/chain_ppo_fig.png)
+![avatar](assets/chain_policy_reduce_fig.png)
+
+#### Scaling Study of CHAIN
+
+![avatar](assets/chain_scaling_fig.png)
+![avatar](assets/chain_scaling_table.png)
+
+Please refer to our [paper](https://openreview.net/pdf?id=cQoAgPBARc#page=21.54) for complete results.
 
 ---
-Citation
+### Citation
 
 ```
 @inproceedings{
