@@ -9,7 +9,7 @@ Please refer to our [paper](https://openreview.net/pdf?id=cQoAgPBARc#page=21.54)
 
 ## Running Environment Setups:
 
-Since our codes are wirtten upon existing code bases (e.g., **MinAtar**, **MuJoCo/DMC Suite** from CleanRL, **D4RL** from CORL), one can run our code by following the installation of corresponding environments.
+Since our codes are developed upon existing code bases (e.g., **MinAtar**, **MuJoCo/DMC Suite** from CleanRL, **D4RL** from CORL), one can run our code by following the installation of corresponding environments.
 Then download our code and put into the running script folder.
 
 We also provide the Dockerfile we used in ```./dockerfiles``` for reference. In practice, we mainly run with Apptainer (by building docker images first and converting them to Apptainer images).
